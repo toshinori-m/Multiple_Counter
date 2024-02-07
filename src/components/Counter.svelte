@@ -1,5 +1,28 @@
+<div class="counter-container">
+  <input class="counter-input" type="text" placeholder="new" />
+  <span class="counter-number">{count}</span>
+  <button class="counter-button-plus" on:click={increment}>+</button>
+  <button class="counter-button-minus" on:click={decrement}>-</button>
+  <button class="counter-zero" on:click={reset}>0</button>
+  <button class="counter-delete">x</button>
+</div>
+
 <script>
-  // ここにはスクリプトが続きます（変数の宣言や関数など）
+  let count = 0;
+
+  function increment() {
+    count += 1;
+  }
+
+  function decrement() {
+    if (count > 0) {
+      count -= 1;
+    }
+  }
+
+  function reset() {
+    count = 0;
+  }
 </script>
 
 <style>
@@ -47,14 +70,6 @@
     border-bottom-left-radius: 4px;
   }
 
-  .counter-button-plus.active {
-    border: 2px solid red;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
-
   .counter-button-minus {
     height: 35px;
     width: 32px;
@@ -65,14 +80,6 @@
     color: rgb(255 255 255);
     background-color: rgb(59 130 246);
   }
-
-.counter-button-minus.active {
-  border: 2px solid red;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
 
   .counter-zero {
     height: 35px;
@@ -87,14 +94,6 @@
     border-bottom-right-radius: 4px;
   }
 
-  .counter-zero.active {
-  border: 2px solid red;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
   .counter-delete {
     height: 35px;
     width: 32px;
@@ -105,13 +104,3 @@
     color: rgb(169, 170, 172);;
   }
 </style>
-
-<div class="counter-container">
-  <input class="counter-input" type="text" placeholder="new" />
-  <span class="counter-number">0</span>
-  <button class="counter-button-plus">+</button>
-  <button class="counter-button-minus">-</button>
-  <button class="counter-zero">0</button>
-  <button class="counter-button counter-delete">x</button>
-</div>
-
