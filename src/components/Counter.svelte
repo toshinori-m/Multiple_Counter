@@ -4,10 +4,13 @@
   <button class="counter-button-plus" on:click={increment}>+</button>
   <button class="counter-button-minus" on:click={decrement}>-</button>
   <button class="counter-zero" on:click={reset}>0</button>
-  <button class="counter-delete">x</button>
+  <button class="counter-delete" on:click={remove}>x</button>
 </div>
 
 <script>
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
   let count = 0;
 
   function increment() {
@@ -22,6 +25,10 @@
 
   function reset() {
     count = 0;
+  }
+
+  function remove() {
+    dispatch('remove');
   }
 </script>
 

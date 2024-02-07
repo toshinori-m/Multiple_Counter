@@ -1,10 +1,10 @@
 <main>
   <h1>Multiple Counter</h1>
-  <Counter />
+  {#each counters as counter, index (index)}
+    <Counter on:remove={() => removeCounter(index)} />
+  {/each}
 	<div class="container">
-		<div class="new-counter">
-			new counter
-		</div>
+		<button class="new-counter" on:click={addCounter}>new counter</button>
 	</div>
   <div class="title-list">
     title list: {titles.join(', ')}
@@ -16,8 +16,18 @@
 
 <script>
   import Counter from './components/Counter.svelte';
+
+	let counters = [{}];
 	let count = 0;
   let titles = ['new'];
+
+	function addCounter() {
+    counters = [...counters, {}];
+  }
+
+  function removeCounter(index) {
+    counters = counters.filter((_, i) => i !== index);
+  }
 </script>
 
 <style>
@@ -41,13 +51,13 @@
 		cursor: pointer;
     font-size: 1rem;
     text-align: center;
+    padding: 0;
 		height: 24px;
 		margin: 0 auto;
     color: white;
 		width: 384px;
     background-color: #44c774d6;
     border-radius: 3px;
-    margin: 0;
   }
 
 	.title-list, .sum-count {
