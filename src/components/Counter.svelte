@@ -1,5 +1,5 @@
 <div class="counter-container">
-  <input class="counter-input" type="text" placeholder="new" />
+  <input class="counter-input" type="text" bind:value={title} />
   <span class="counter-number">{count}</span>
   <button class="counter-button-plus" on:click={increment}>+</button>
   <button class="counter-button-minus" on:click={decrement}>-</button>
@@ -11,7 +11,12 @@
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
+  export let title = 'new';
   let count = 0;
+
+  $: if (title !== 'new') {
+    dispatch('updateTitle', { title });
+  }
 
   function increment() {
     count += 1;

@@ -1,7 +1,11 @@
 <main>
   <h1>Multiple Counter</h1>
   {#each counters as counter, index (index)}
-    <Counter on:remove={() => removeCounter(index)} />
+		<Counter
+			title={counter.title}
+			on:remove={() => removeCounter(index)}
+			on:updateTitle={(event) => updateTitle(event, index)}
+		/>
   {/each}
 	<div class="container">
 		<button class="new-counter" on:click={addCounter}>new counter</button>
@@ -17,16 +21,23 @@
 <script>
   import Counter from './components/Counter.svelte';
 
-	let counters = [{}];
+	let counters = [{ title: 'new' }];
 	let count = 0;
   let titles = ['new'];
 
 	function addCounter() {
-    counters = [...counters, {}];
-  }
+		counters = [...counters, { title: 'new' }];
+		titles = counters.map(c => c.title);
+	}
 
   function removeCounter(index) {
     counters = counters.filter((_, i) => i !== index);
+		titles = counters.map(c => c.title);
+  }
+
+	function updateTitle(event, index) {
+    counters[index].title = event.detail.title;
+    titles = counters.map(c => c.title);
   }
 </script>
 
