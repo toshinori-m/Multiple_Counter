@@ -12,11 +12,13 @@
 
   const dispatch = createEventDispatcher();
   export let title = 'new';
-  let count = 0;
+  export let id;
+  export let count;
 
   $: if (title !== 'new') {
     dispatch('updateTitle', { title });
   }
+  $: dispatch('updateCount', { id, count });
 
   function increment() {
     count += 1;
@@ -33,7 +35,7 @@
   }
 
   function remove() {
-    dispatch('remove');
+    dispatch('remove', { id });
   }
 </script>
 
@@ -47,11 +49,12 @@
     padding: 0;
     background-color: #f7f7fa;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
-    margin: 12px auto 8px;
+    margin: 5px auto 8px;
     position: relative;
   }
 
   .counter-input {
+    color: rgb(156, 148, 148);
     margin: 0 16px;
     height: 24px;
     padding: 0 4px;

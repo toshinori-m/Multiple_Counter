@@ -1,10 +1,13 @@
 <main>
   <h1>Multiple Counter</h1>
-  {#each counters as counter, index (index)}
+  {#each counters as counter (counter.id)}
 		<Counter
+			id={counter.id}
 			title={counter.title}
-			on:remove={() => removeCounter(index)}
-			on:updateTitle={(event) => updateTitle(event, index)}
+			count={counter.count}
+      on:updateCount={handleUpdateCount}
+			on:remove={event => removeCounter(event.detail.id)}
+			on:updateTitle={event => updateTitle(event, counter.id)}
 		/>
   {/each}
 	<div class="container">
@@ -14,31 +17,54 @@
     title list: {titles.join(', ')}
   </div>
   <div class="sum-count">
-    sum of count: {count}
+    sum of count: {totalCount}
   </div>
 </main>
 
 <script>
   import Counter from './components/Counter.svelte';
 
-	let counters = [{ title: 'new' }];
-	let count = 0;
+	let counters = [{ id: Date.now(), title: 'new', count: 0 }];
   let titles = ['new'];
 
+	const calculateTotalCount = () => {
+    return counters.reduce((total, counter) => total + counter.count, 0);
+  };
+	
+  let totalCount = calculateTotalCount();
+
+  function handleUpdateCount(event) {
+    const { id, count } = event.detail;
+    const index = counters.findIndex(counter => counter.id === id);
+    if (index !== -1) {
+      counters[index].count = count;
+      totalCount = calculateTotalCount();
+    }
+  }
+
 	function addCounter() {
-		counters = [...counters, { title: 'new' }];
-		titles = counters.map(c => c.title);
+    const newCounter = {
+      id: Date.now(),
+      title: 'new',
+      count: 0
+    };
+    counters = [...counters, newCounter];
+    titles = counters.map(c => c.title);
 	}
 
-  function removeCounter(index) {
-    counters = counters.filter((_, i) => i !== index);
-		titles = counters.map(c => c.title);
+	function removeCounter(id) {
+    counters = counters.filter(counter => counter.id !== id);
+    titles = counters.map(c => c.title);
+    totalCount = calculateTotalCount();
   }
 
-	function updateTitle(event, index) {
-    counters[index].title = event.detail.title;
-    titles = counters.map(c => c.title);
-  }
+	function updateTitle(event, id) {
+		const index = counters.findIndex(counter => counter.id === id);
+		if (index !== -1) {
+			counters[index].title = event.detail.title;
+			titles = counters.map(c => c.title);
+		}
+	}
 </script>
 
 <style>
