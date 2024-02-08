@@ -13,6 +13,7 @@
   const dispatch = createEventDispatcher();
   export let title = 'new';
   let count = 0;
+  export let id;
 
   $: if (title !== 'new') {
     dispatch('updateTitle', { title });
@@ -33,7 +34,8 @@
   }
 
   function remove() {
-    dispatch('remove');
+    dispatch('remove', { id });
+    console.log("id",id);
   }
 </script>
 

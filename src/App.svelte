@@ -1,10 +1,11 @@
 <main>
   <h1>Multiple Counter</h1>
-  {#each counters as counter, index (index)}
+  {#each counters as counter (counter.id)}
 		<Counter
+			id={counter.id}
 			title={counter.title}
-			on:remove={() => removeCounter(index)}
-			on:updateTitle={(event) => updateTitle(event, index)}
+			on:remove={event => removeCounter(event.detail.id)}
+			on:updateTitle={event => updateTitle(event, counter.id)}
 		/>
   {/each}
 	<div class="container">
@@ -26,19 +27,27 @@
   let titles = ['new'];
 
 	function addCounter() {
-		counters = [...counters, { title: 'new' }];
-		titles = counters.map(c => c.title);
+    const newCounter = {
+      id: Date.now(),
+      title: 'new',
+      count: 0
+    };
+    counters = [...counters, newCounter];
+    titles = counters.map(c => c.title);
 	}
 
-  function removeCounter(index) {
-    counters = counters.filter((_, i) => i !== index);
+  function removeCounter(id) {
+		counters = counters.filter(counter => counter.id !== id);
 		titles = counters.map(c => c.title);
   }
 
-	function updateTitle(event, index) {
-    counters[index].title = event.detail.title;
-    titles = counters.map(c => c.title);
-  }
+	function updateTitle(event, id) {
+		const index = counters.findIndex(counter => counter.id === id);
+		if (index !== -1) {
+			counters[index].title = event.detail.title;
+			titles = counters.map(c => c.title);
+		}
+	}
 </script>
 
 <style>
