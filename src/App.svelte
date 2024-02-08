@@ -4,6 +4,8 @@
 		<Counter
 			id={counter.id}
 			title={counter.title}
+			count={counter.count}
+      on:updateCount={handleUpdateCount}
 			on:remove={event => removeCounter(event.detail.id)}
 			on:updateTitle={event => updateTitle(event, counter.id)}
 		/>
@@ -15,16 +17,30 @@
     title list: {titles.join(', ')}
   </div>
   <div class="sum-count">
-    sum of count: {count}
+    sum of count: {totalCount}
   </div>
 </main>
 
 <script>
   import Counter from './components/Counter.svelte';
 
-	let counters = [{ title: 'new' }];
-	let count = 0;
+	let counters = [{ id: Date.now(), title: 'new', count: 0 }];
   let titles = ['new'];
+
+	const calculateTotalCount = () => {
+    return counters.reduce((total, counter) => total + counter.count, 0);
+  };
+	
+  let totalCount = calculateTotalCount();
+
+  function handleUpdateCount(event) {
+    const { id, count } = event.detail;
+    const index = counters.findIndex(counter => counter.id === id);
+    if (index !== -1) {
+      counters[index].count = count;
+      totalCount = calculateTotalCount();
+    }
+  }
 
 	function addCounter() {
     const newCounter = {
@@ -36,9 +52,10 @@
     titles = counters.map(c => c.title);
 	}
 
-  function removeCounter(id) {
-		counters = counters.filter(counter => counter.id !== id);
-		titles = counters.map(c => c.title);
+	function removeCounter(id) {
+    counters = counters.filter(counter => counter.id !== id);
+    titles = counters.map(c => c.title);
+    totalCount = calculateTotalCount();
   }
 
 	function updateTitle(event, id) {
