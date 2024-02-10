@@ -11,7 +11,7 @@
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  export let title = 'new';
+  export let title;
   export let id;
   export let count;
 
