@@ -21,10 +21,16 @@
   </div>
 </main>
 
-<script>
+<script lang="ts">
   import Counter from './components/Counter.svelte';
 
-  let counters = [{ id: Date.now(), title: 'new', count: 0 }];
+  interface CounterType {
+    id: number;
+    title: string;
+    count: number;
+  }
+
+  let counters: CounterType[] = [{ id: Date.now(), title: 'new', count: 0 }];
   let titles = ['new'];
 
   const calculateTotalCount = () => {
@@ -59,11 +65,10 @@
   }
 
   function updateTitle(event, id) {
-    const index = counters.findIndex(counter => counter.id === id);
-    if (index !== -1) {
-      counters[index].title = event.detail.title;
-      titles = counters.map(c => c.title);
-    }
+    counters = counters.map(counter => 
+      counter.id === id ? { ...counter, title: event.detail.title } : counter
+    );
+    titles = counters.map(c => c.title);
   }
 </script>
 
