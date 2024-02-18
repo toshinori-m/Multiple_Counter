@@ -17,7 +17,7 @@
     title list: {titles.join(', ')}
   </div>
   <div class="sum-count">
-    sum of count: {totalCount}
+    sum of count: { calculateTotalCount }
   </div>
 </main>
 
@@ -27,18 +27,14 @@
   let counters = [{ id: Date.now(), title: 'new', count: 0 }];
   let titles = ['new'];
 
-  const calculateTotalCount = () => {
-    return counters.reduce((total, counter) => total + counter.count, 0);
-  };
-	
-  let totalCount = calculateTotalCount();
+  $: calculateTotalCount = counters.reduce((total, counter) => total + counter.count, 0);
+  $: titles = counters.map(c => c.title);
 
   function handleUpdateCount(event) {
     const { id, count } = event.detail;
     const index = counters.findIndex(counter => counter.id === id);
     if (index !== -1) {
       counters[index].count = count;
-      totalCount = calculateTotalCount();
     }
   }
 
@@ -49,20 +45,16 @@
       count: 0
     };
     counters = [...counters, newCounter];
-    titles = counters.map(c => c.title);
   }
 
   function removeCounter(id) {
     counters = counters.filter(counter => counter.id !== id);
-    titles = counters.map(c => c.title);
-    totalCount = calculateTotalCount();
   }
 
   function updateTitle(event, id) {
     const index = counters.findIndex(counter => counter.id === id);
     if (index !== -1) {
       counters[index].title = event.detail.title;
-      titles = counters.map(c => c.title);
     }
   }
 </script>
