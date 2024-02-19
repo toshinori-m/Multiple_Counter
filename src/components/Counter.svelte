@@ -7,31 +7,31 @@
   <button class="counter-delete" on:click={remove}>x</button>
 </div>
 
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
-  export let title;
-  export let id;
-  export let count;
+  export let title: string;
+  export let id: number;
+  export let count: number;
 
-  $: if (title !== 'new') {
-    dispatch('updateTitle', { title });
-  }
-  $: dispatch('updateCount', { id, count });
+  $: dispatch('updateTitle', { id, newTitle: title });
 
   function increment() {
     count += 1;
+    dispatch('updateCount', { id, newCount: count });
   }
 
   function decrement() {
     if (count > 0) {
       count -= 1;
+      dispatch('updateCount', { id, newCount: count });
     }
   }
 
   function reset() {
     count = 0;
+    dispatch('updateCount', { id, newCount: count });
   }
 
   function remove() {
