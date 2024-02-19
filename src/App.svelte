@@ -23,7 +23,7 @@
 
 <script lang="ts">
   import Counter from './components/Counter.svelte';
-  import type { CounterType } from './types/counterType';
+  import type { CounterType } from './types';
 
   let counters: CounterType[] = [{ id: Date.now(), title: 'new', count: 0 }];
 
