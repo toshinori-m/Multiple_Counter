@@ -5,57 +5,45 @@
       id={counter.id}
       title={counter.title}
       count={counter.count}
-      on:updateCount={handleUpdateCount}
-      on:remove={event => removeCounter(event.detail.id)}
-      on:updateTitle={event => updateTitle(event, counter.id)}
+      on:updateCount={event => handleUpdateCount(counter.id, event.detail.newCount)}
+      on:remove={() => removeCounter(counter.id)}
+      on:updateTitle={event => updateTitle(counter.id, event.detail.newTitle)}
     />
   {/each}
   <div class="container">
-  <button class="new-counter" on:click={addCounter}>new counter</button>
+    <button class="new-counter" on:click={addCounter}>new counter</button>
   </div>
   <div class="title-list">
     title list: {titles.join(', ')}
   </div>
   <div class="sum-count">
-    sum of count: { calculateTotalCount }
+    sum of count: {calculateTotalCount}
   </div>
 </main>
 
-<script>
+<script lang="ts">
   import Counter from './components/Counter.svelte';
+  import type { CounterType } from './types';
 
-  let counters = [{ id: Date.now(), title: 'new', count: 0 }];
-  let titles = ['new'];
+  let counters: CounterType[] = [{ id: Date.now(), title: 'new', count: 0 }];
 
   $: calculateTotalCount = counters.reduce((total, counter) => total + counter.count, 0);
   $: titles = counters.map(c => c.title);
 
-  function handleUpdateCount(event) {
-    const { id, count } = event.detail;
-    const index = counters.findIndex(counter => counter.id === id);
-    if (index !== -1) {
-      counters[index].count = count;
-    }
+  function handleUpdateCount(id: number, newCount: number): void {
+    counters = counters.map(counter => counter.id === id ? { ...counter, count: newCount } : counter);
   }
 
-  function addCounter() {
-    const newCounter = {
-      id: Date.now(),
-      title: 'new',
-      count: 0
-    };
-    counters = [...counters, newCounter];
+  function addCounter(): void {
+    counters = [...counters, { id: Date.now(), title: 'new', count: 0 }];
   }
 
-  function removeCounter(id) {
+  function removeCounter(id: number): void {
     counters = counters.filter(counter => counter.id !== id);
   }
 
-  function updateTitle(event, id) {
-    const index = counters.findIndex(counter => counter.id === id);
-    if (index !== -1) {
-      counters[index].title = event.detail.title;
-    }
+  function updateTitle(id: number, newTitle: string): void {
+    counters = counters.map(counter => counter.id === id ? { ...counter, title: newTitle } : counter);
   }
 </script>
 
