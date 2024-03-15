@@ -9,32 +9,31 @@
 
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import type { CounterEvents } from '../types';
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<CounterEvents>();
   export let title: string;
   export let id: number;
   export let count: number;
 
-  $: dispatch('updateTitle', { id, newTitle: title });
-
-  function increment() {
+  function increment(): void {
     count += 1;
     dispatch('updateCount', { id, newCount: count });
   }
 
-  function decrement() {
+  function decrement(): void {
     if (count > 0) {
       count -= 1;
       dispatch('updateCount', { id, newCount: count });
     }
   }
 
-  function reset() {
+  function reset(): void {
     count = 0;
     dispatch('updateCount', { id, newCount: count });
   }
 
-  function remove() {
+  function remove(): void {
     dispatch('remove', { id });
   }
 </script>

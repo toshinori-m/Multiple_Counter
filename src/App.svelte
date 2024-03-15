@@ -26,8 +26,10 @@
   import type { CounterType } from './types';
 
   let counters: CounterType[] = [{ id: Date.now(), title: 'new', count: 0 }];
-
+  
+  let calculateTotalCount: number;
   $: calculateTotalCount = counters.reduce((total, counter) => total + counter.count, 0);
+  let titles: string[];
   $: titles = counters.map(c => c.title);
 
   function handleUpdateCount(id: number, newCount: number): void {

@@ -3,3 +3,8 @@ export interface CounterType {
   title: string;
   count: number;
 }
+
+export interface CounterEvents {
+  updateCount: { id: number; newCount: number };
+  remove: { id: number };
+}
